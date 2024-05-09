@@ -1,0 +1,27 @@
+@Tutorials(name: "Swift Matter Examples") {
+  @Intro(title: "Build a Matter accessory with Embedded Swift") {
+    Learn how to build a simple Embedded Swift application that implements a Matter smart light accessory.
+    
+    Requirements: an ESP32-C6 microcontroller, ESP-IDF SDK, and ESP-Matter SDK.
+
+    @Image(source: "house.badge.wifi.png", alt: "FIXME-ALT")
+  }
+  
+  @Chapter(name: "Setup your environment") {
+    Download, install, and configure the necessary tools.
+    
+    @Image(source: "arrow.down.circle.png", alt: "FIXME-ALT")
+    
+    @TutorialReference(tutorial: "doc:Setup-MacOS")
+    @TutorialReference(tutorial: "doc:Setup-Linux")
+  }
+  
+  @Chapter(name: "Run the examples") {
+    Build the smart light application and run it on your microcontroller.
+    
+    @Image(source: "cpu.png", alt: "FIXME-ALT")
+
+    @TutorialReference(tutorial: "doc:Run-Example-LED-Blink")
+    @TutorialReference(tutorial: "doc:Run-Example-Smart-Light")
+  }
+}

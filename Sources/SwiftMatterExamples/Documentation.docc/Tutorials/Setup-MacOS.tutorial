@@ -1,0 +1,171 @@
+@Tutorial(time: 30) {
+  @Intro(title: "Get started on macOS") {
+    Install the tools needed to build an ESP Matter accessory on macOS.
+  }
+  
+  @Section(title: "Install Xcode") {
+    @ContentAndMedia {
+      Install Xcode to manage custom Swift toolchains. 
+      
+      @Image(source: "xcode-logo.png", alt: "FIXME-ALT")
+    }
+    
+    @Steps {
+      @Step{
+        Navigate to [Xcode on the App store](https://apps.apple.com/us/app/xcode/id497799835) and select **Get** to download and install Xcode.
+        
+        @Image(source: "xcode-download.png", alt: "FIXME-ALT")
+      }
+      
+      @Step {
+        (Optional) Visit the [Xcode homepage](https://developer.apple.com/xcode/) to learn more about Xcode.
+        
+        @Image(source: "xcode-home.png", alt: "FIXME-ALT")        
+      }
+    }
+  }
+  
+  @Section(title: "Install the Swift Nightly Toolchain") {
+    @ContentAndMedia {
+      Embedded Swift requires a recent nightly version of the Swift toolchain. Learn how to download and install a nightly build of Swift.
+      
+      @Image(source: "swift-logo.png", alt: "FIXME-ALT")
+    }
+    
+    @Steps {
+      @Step {
+        Navigate to the [Swift.org](https://www.swift.org/download/) downloads page.
+        
+        @Image(source: "swift-org-downloads.png", alt: "FIXME-ALT")
+      }
+      
+      @Step {
+        Scroll to the **Trunk Development (main)** subsection, and select **Xcode Universal** to download the latest Swift nightly toolchain.
+        
+        @Image(source: "swift-org-downloads-main.png", alt: "FIXME-ALT")
+      }
+      
+      @Step {
+        Open and install the downloaded **swift-DEVELOPMENT-SNAPSHOT-202X-XX-XX-a-osx.pkg**.
+        
+        Installing this package for **all users** requires administrative privileges and may open a password or Touch ID prompt.
+        
+        @Image(source: "swift-org-downloads-installer.png", alt: "FIXME-ALT")
+      }
+      
+      @Step {
+        Locate the installed toolchain. During the installation process, if you selected **Install for all users**, the toolchain should be installed under **`/Library/Developer/Toolchains`**, if you   selected **Install for me only**, check **`~/Library/Developer/Toolchains`** instead.
+        
+        Make sure you see an **xctoolchain** file matching the name of the toolchain package in this directory.
+        
+        @Code(name: "Setup.shell", file: "install-swift-terminal-00.sh")
+      }
+      
+      @Step {
+        Find the toolchain's identifier with the **`plutil`** command and record the printed identifier.
+        
+        In this example the toolchain has the identifier "org.swift.59202406031a".
+        
+        @Code(name: "Setup.shell", file: "install-swift-terminal-01.sh", previousFile: "install-swift-terminal-00.sh")
+      }
+      
+      @Step {
+        Select the installed toolchain with the **`TOOLCHAINS`** environment variable and verify it works with the **`swift --version`** command.
+        
+        You should see a version string like **"Apple Swift version 6.0-dev"**.
+        
+        @Code(name: "Setup.shell", file: "install-swift-terminal-02.sh", previousFile: "install-swift-terminal-01.sh")
+      }
+    }
+  }
+  
+  @Section(title: "Install ESP-IDF and ESP-Matter SDKs") {
+    @ContentAndMedia {
+      Install the tools and SDKs needed to build an ESP32-C6 Matter accessory.
+      
+      The steps here should be enough to get started quickly, but for additional detailed instructions see the official [ESP-IDF Setup](https://docs.espressif.com/projects/esp-idf/en/v5.2.1/esp32/get-started/linux-macos-setup.html) and [ESP-Matter Setup](https://docs.espressif.com/projects/esp-matter/en/latest/esp32/developing.html#esp-matter-setup) documentation.
+    }
+
+    @Steps {
+      @Step {
+        If you don't have it yet, install Homebrew by following the setup instructions on [the Brew homepage](https://brew.sh).
+        
+        @Code(name: "Setup.shell", file: "install-esp-terminal-00.sh")
+      }
+      
+      @Step {
+        Use `brew` to install the ESP SDK dependencies: CMake, Ninja, and dfu-util.
+        
+        Note: Building Swift code with CMake requires version 3.29 or later.
+        
+        @Code(name: "Setup.shell", file: "install-esp-terminal-01.sh", previousFile: "install-esp-terminal-00.sh")
+      }
+
+      @Step {
+        In your home directory, prepare a subdirectory for the ESP SDKs that we need.
+        
+        @Code(name: "Setup.shell", file: "install-esp-terminal-02.sh", previousFile: "install-esp-terminal-01.sh")
+      }
+      
+      @Step {
+        Clone the ESP-IDF repository version 5.2.1 from GitHub.
+        
+        Note this SDK is quite large (~500 MB for a shallow clone) and may take significant time to download depending on your internet connection.
+        
+        @Code(name: "Setup.shell", file: "install-esp-terminal-03.sh", previousFile: "install-esp-terminal-02.sh")
+      }
+      
+      @Step {
+        Run the ESP-IDF install script.
+        
+        This will download additional tools and python packages needed to build for the ESP32 microcontrollers.
+        
+        @Code(name: "Setup.shell", file: "install-esp-terminal-04.sh", previousFile: "install-esp-terminal-03.sh")
+      }
+      
+      @Step {
+        Clone the ESP Matter repository version 1.2 from GitHub.
+        
+        Note this SDK is extremely large (~13 GB for a shallow clone) and may take significant time to download depending on your internet connection.
+        
+        @Code(name: "Setup.shell", file: "install-esp-terminal-05.sh", previousFile: "install-esp-terminal-04.sh")
+      }
+      
+      @Step {
+        Run the ESP Matter install script.
+        
+        This will download and build additional tools and python packages needed to build a Matter accessory for the ESP32 microcontrollers.
+        
+        @Code(name: "Setup.shell", file: "install-esp-terminal-06.sh", previousFile: "install-esp-terminal-05.sh")
+      }            
+    }
+  }
+
+  @Section(title: "Setup your shell environment") {
+    @ContentAndMedia {
+      Configure your shell to find the installed tools.
+      
+      The following commands can be either be run once per shell session or be placed your `~/.zshrc` file.
+    }
+    
+    @Steps {
+      @Step {
+        Set the `TOOLCHAINS` environment variable to use the installed Swift nightly toolchain.
+
+        @Code(name: "Setup.shell", file: "setup-macOS-00.sh")
+      }
+      
+      @Step {
+        Use the ESP-IDF export script to add the tools to your environment. 
+      
+        @Code(name: "Setup.shell", file: "setup-macOS-01.sh", previousFile: "setup-macOS-00.sh")
+      }
+      
+      @Step {
+        Use the ESP-Matter export script to add the tools to your environment.
+        
+        @Code(name: "Setup.shell", file: "setup-macOS-02.sh", previousFile: "setup-macOS-01.sh")
+      }
+    }
+  }
+}

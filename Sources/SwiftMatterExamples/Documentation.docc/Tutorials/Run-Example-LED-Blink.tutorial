@@ -1,0 +1,111 @@
+@Tutorial(time: 10) {
+  @Intro(title: "Explore the LED Blink example") {
+    Build, run, and understand the LED Blink application.
+  }
+
+  @Section(title: "Build and Run") {
+    @ContentAndMedia { 
+      Build the LED Blink application and run it on your microcontroller.
+    }
+    
+    @Steps {
+      @Step {
+        Connect your ESP32-C6 microcontroller to your host machine over USB using the USB Type-C connector closest to the RGB LED.
+        
+        @Image(source: "esp32-c6-usb.png", alt: "FIXME-ALT.")
+      }
+    
+      @Step {
+        If you don't have it yet, clone the `swift-matter-examples` repository.
+
+        @Code(name: "Run.shell", file: "run-example-led-blink-00.sh")
+      }
+      
+      @Step {
+        Navigate to the led-blink example.
+        
+        @Code(name: "Run.shell", file: "run-example-led-blink-01.sh", previousFile: "run-example-led-blink-00.sh") 
+      }
+      
+      @Step {
+        Use **idf.py** to configure example for the ESP32-C6 microcontroller.
+        
+        @Code(name: "Run.shell", file: "run-example-led-blink-02.sh", previousFile: "run-example-led-blink-01.sh") 
+      }
+      
+      @Step {
+        Use **idf.py** to build the application.
+        
+        @Code(name: "Run.shell", file: "run-example-led-blink-03.sh", previousFile: "run-example-led-blink-02.sh") 
+      }
+      
+      @Step {
+        Use **idf.py** to flash the application onto your microcontroller.
+        
+        > Important: Use **`Ctrl + ]`** to exit the monitor program.
+        
+        @Code(name: "Run.shell", file: "run-example-led-blink-04.sh", previousFile: "run-example-led-blink-03.sh") 
+      }
+
+      @Step {
+        After flashing completes, you should see the microcontroller begin to blink its LED once per second changing to a random color each time.
+        
+        Additionally, you should see `🏎️ Hello, Embedded Swift! (LED Blink)` in the monitor log followed by logs indicating the LED is changing colors.
+        
+         @Image(source: "run-example-led-blink-hello.png", alt: "FIXME-ALT.")
+      }
+    }
+  }
+    
+  @Section(title: "Understand the code") {
+    @ContentAndMedia { 
+        Take a brief tour of the code that composes the LED Blink example.
+    }
+
+    @Steps {
+      @Step {
+        We start the application by declaring an **`app_main`** function with a print statement to show the application has started.
+
+        `app_main` serves the same purpose as a `main` function in a traditional user-land application and acts as the primary entry point for our firmware application.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-led-blink-01.swift", previousFile: "walkthrough-example-led-blink-00.swift")
+      }
+
+      @Step {
+        We use the **`@_cdecl("app_main")`** attribute to generate a wrapper C symbol which is expected by ESP IDF.
+        
+        > Important: Underscored attributes, like `@_cdecl`, are unstable features of the Swift compiler and may change behavior or break between compiler versions.        
+
+        @Code(name: "Main.swift", file: "walkthrough-example-led-blink-02.swift", previousFile: "walkthrough-example-led-blink-01.swift")
+      }
+      
+      @Step {
+        We then declare an **`led`** variable of type **`LED`** to control the hardware RGB LED on the microcontroller.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-led-blink-03.swift", previousFile: "walkthrough-example-led-blink-02.swift")
+      }
+      
+      @Step {
+        Diverting for a moment, "LED.swift" is a light-weight wrapper around ESP IDF functions. It defines an LED type to provide idiomatic Swift APIs for existing IDF functionality.
+        
+        Wrapping existing C APIs is a great way to make your code more readable and wrap potentially unsafe interfaces into safe ones.
+
+        @Code(name: "LED.swift", file: "walkthrough-example-led-blink-led-01.swift", previousFile: "walkthrough-example-led-blink-led-00.swift")
+      }
+      
+      @Step {
+        Returning to "Main.swift", we next use the API provided by "LED.swift" to set the initial LED color to red and brightness to 10%.
+        
+        @Code(name: "Main.swift", file: "walkthrough-example-led-blink-04.swift", previousFile: "walkthrough-example-led-blink-03.swift")
+      }
+            
+      @Step {
+        Lastly, we create an infinite loop which waits 1 second before switching the led from on to off or vise-versa. Next, if the LED is on, we set LED to a random color. 
+
+        This loop creates the blinking behavior we observe on the microcontroller.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-led-blink-05.swift", previousFile: "walkthrough-example-led-blink-04.swift")
+      }
+    }
+  }
+}

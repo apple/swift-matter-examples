@@ -1,0 +1,214 @@
+@Tutorial(time: 20) {
+  @Intro(title: "Explore the Smart Light example") {
+    Build, run, and understand the Smart Light application.
+  }
+  
+  @Section(title: "Build and Run") {
+    @ContentAndMedia { 
+      Build the Smart Light application and run it on your microcontroller.  
+    }
+
+    @Steps {
+      @Step {
+        Connect your ESP32-C6 microcontroller to your host machine over USB using the USB Type-C connector closest to the RGB LED.
+        
+        @Image(source: "esp32-c6-usb.png", alt: "FIXME-ALT.")
+      }
+    
+      @Step {
+        If you don't have it yet, clone the `swift-matter-examples` repository.
+
+        @Code(name: "Run.shell", file: "run-example-smart-light-00.sh")
+      }
+      
+      @Step {
+        Navigate to the smart light example.
+        
+        @Code(name: "Run.shell", file: "run-example-smart-light-01.sh", previousFile: "run-example-smart-light-00.sh") 
+      }
+      
+      @Step {
+        Use **idf.py** to configure example for the ESP32-C6 microcontroller.
+        
+        @Code(name: "Run.shell", file: "run-example-smart-light-02.sh", previousFile: "run-example-smart-light-01.sh") 
+      }
+      
+      @Step {
+        Use **idf.py** to build the application.
+        
+        @Code(name: "Run.shell", file: "run-example-smart-light-03.sh", previousFile: "run-example-smart-light-02.sh") 
+      }
+      
+      @Step {
+        Use **idf.py** to flash the application onto your microcontroller.
+        
+        > Important: Use **`Ctrl + ]`** to exit the monitor program.
+        
+        @Code(name: "Run.shell", file: "run-example-smart-light-04.sh", previousFile: "run-example-smart-light-03.sh") 
+      }
+      
+      @Step {
+        After flashing completes you should see the microcontroller turn on the LED.
+        
+        Additionally you should see `🏎️ Hello, Embedded Swift! (Smart Light)` in the monitor log followed by logs indicating the LED is changing colors.
+        
+         @Image(source: "run-example-smart-light-hello.png", alt: "FIXME-ALT.")
+      }
+    }
+  }
+    
+  @Section(title: "Connect using Matter") {
+    @ContentAndMedia { 
+      Pair and control your microcontroller using Matter. 
+      
+      > Important: These steps use HomeKit via the "Home" app on iOS 17, however similar steps should work for other connected home ecosystems.
+      
+      @Image(source: "homekit-logo.png", alt: "FIXME-ALT.")
+    }
+    
+    @Steps {
+      @Step {
+        Open the "Home" app and select the "plus" icon to add a new accessory.
+        
+        Be sure you already have a Home hub configured, like a HomePod as shown in this setup.
+        
+        @Image(source: "pairing-00.png", alt: "Home app open to the \"Home\" tab with an Airport Express and HomePod paired.")
+      }
+      @Step {
+        Select the "More options..." button on the "Add Accessory" overlay. 
+        
+        @Image(source: "pairing-01.png", alt: "Home app displaying the \"Add Accessory\" overlay.")
+      }
+      @Step {
+        Select the "Matter Accessory" from the list of nearby accessories. 
+        
+        If the microcontroller doesn't appear in this list you can use `idf.py erase-flash` to reset the device and try again.
+        
+        @Image(source: "pairing-02.png", alt: "Home app displaying the \"Select an Accessory\" overlay with one nearby item named \"Matter Accessory\".")
+      }
+      @Step {
+        Enter the setup code **`2020-2021`** to pair the device.
+        
+        @Image(source: "pairing-03.png", alt: "Home app display the \"Setup Code\" overlay filled out with the text \"2020-2021\".")
+      }
+      @Step {
+        Your microcontroller should now begin pairing.
+        
+        @Image(source: "pairing-04.png", alt: "Home app displaying the \"Accessory\" overlay with the text \"Connecting..\".")
+      }
+      @Step {
+        During the pairing process you may be presented with an "Uncertified Accessory" alert, select "Add Anyway" to continue pairing.
+        
+        This alert is shown because the microcontroller is not a certified device.
+        
+        @Image(source: "pairing-05.png", alt: "Home app displaying the \"Uncertified Accessory\" alert with two options, \"Add Anyway\" and \"Cancel\" on top of the \"Accessory\" overlay.")
+      }
+      @Step {
+        Once the pairing process completes, you should see an "Accessory Added" overlay indicating success.
+        
+        @Image(source: "pairing-06.png", alt: "Home app displaying the \"Accessory Added\" overlay.")
+      }
+      @Step {
+        The microcontroller should now show up in the main list of accessories as a Smart Light.
+        
+        @Image(source: "pairing-07.png", alt: "Home app open to the \"Home\" tab with an Airport Express, HomePod, and the microcontroller paired.")
+      }
+      @Step {
+        You can now control the LED on the microcontroller by selecting the accessory.
+        
+        @Image(source: "pairing-08.png", alt: "Home app open the \"Matter Accessory\" detail view with the brightness set to 0%.")
+      }
+      @Step {
+        You can change the brightness of the LED using the primary slider.
+        
+        @Image(source: "pairing-09.png", alt: "Home app open the \"Matter Accessory\" detail view with the brightness set to 50%.")
+      }
+      @Step {
+        You can adjust the color using the color wheel.
+        
+        @Image(source: "pairing-10.png", alt: "Home app open the \"Matter Accessory\" color detail view with the color set to a vivid green.")
+      }
+      @Step {
+        You can also adjust the color using a color temperature.
+        
+        @Image(source: "pairing-11.png", alt: "Home app open the \"Matter Accessory\" temperature detail view with the color set to a warm orange.")
+      }
+    }
+  }
+
+  @Section(title: "Understand the code") {
+    @ContentAndMedia { 
+      Take a brief tour of the code that composes the Smart Light example.
+
+      > Note: This walkthrough skips content covered in <doc:Run-Example-LED-Blink>.
+    }
+
+    @Steps {
+      @Step {
+        We start the application by declaring an **`app_main`** function with a print statement to show the application has started.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-01.swift", previousFile: "walkthrough-example-smart-light-00.swift")
+      }
+      
+      @Step {
+        We then create an LED instance to operate on. The LED type is the same type used in the LED Blink example.
+        
+        Next we will start implementing the code required of a Matter accessory.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-02.swift", previousFile: "walkthrough-example-smart-light-01.swift")
+      }
+
+      > Important: The Smart Light example uses a Matter overlay, similar to the LED overlay, which provides idiomatic Swift APIs for Matter C++ APIs.
+
+      @Step {
+        In order to create a Matter accessory, we start by initializing a Matter "root node", which represents the entire accessory.
+
+        The `identifyHandler` callback is designed to help identify the physical accessory. In this example, we log a message, but in a real-world application, a smart light might use this callback to flash its light, providing a clear visual indicator of its location.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-03.swift", previousFile: "walkthrough-example-smart-light-02.swift")
+      }
+      
+      @Step {
+        Second, we create an "endpoint", which represents the RGB LED light and an event handler which we will use to convert Matter events to LED adjustments.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-04.swift", previousFile: "walkthrough-example-smart-light-03.swift")
+      }
+      
+      @Step {
+        We start the event handler by switching over the kind of Matter event (called an **`attribute`**) to determine which LED property to adjust.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-04-a.swift", previousFile: "walkthrough-example-smart-light-04.swift")
+      }
+      
+      @Step {
+        Next, we add cases for the **`.onOff`** and **`.levelControl`** events. We use each event's **`value`** to set the **`led.enabled`** and **`led.brightness`** properties respectively.
+
+        With just these two controls implemented, we are be able to use the light as a switchable and dimmable light.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-04-b.swift", previousFile: "walkthrough-example-smart-light-04-a.swift")
+      }
+
+      @Step {
+        We then add the support for the **`.colorControl`** event. We can use Swift's pattern matching feature to implement each of the hue, saturation, and temperature controls in individual case statements.
+        
+        With all three of these controls implemented, we now have a fully adjustable RGB light.
+
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-04-c.swift", previousFile: "walkthrough-example-smart-light-04-b.swift")
+      }
+
+      @Step {
+        Now we need to connect up the components. We add the light "endpoint" to the "root node" making the light a controllable accessory.
+        
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-05.swift", previousFile: "walkthrough-example-smart-light-04-c.swift")
+      }
+      
+      @Step {
+        Finally, we create a Matter "Application" object, attach it to the "root node", and start the application.
+
+        The microcontroller is now a fully functional Matter smart light accessory!
+
+        @Code(name: "Main.swift", file: "walkthrough-example-smart-light-06.swift", previousFile: "walkthrough-example-smart-light-05.swift")
+      }
+    }
+  }
+}
