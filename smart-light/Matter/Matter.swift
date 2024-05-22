@@ -39,7 +39,7 @@ struct RootNode: MatterNode {
     init(
       attribute: @escaping (MatterAttributeEvent, Endpoint, Cluster, UInt32, UnsafeMutablePointer<esp_matter_attr_val_t>?) -> Void,
       identify: @escaping (esp_matter.identification.callback_type_t, UInt16, UInt8, UInt8) -> Void
-     ) {
+    ) {
       self.attribute = attribute
       self.identify = identify
     }
@@ -53,7 +53,7 @@ struct RootNode: MatterNode {
     identify: @escaping (esp_matter.identification.callback_type_t, UInt16, UInt8, UInt8) -> Void
   ) {
     var nodeConfig = esp_matter.node.config_t()
-    esp_matter.attribute.set_callback_shim { type, endpoint, cluster, attribute, value, context in 
+    esp_matter.attribute.set_callback_shim { type, endpoint, cluster, attribute, value, context in
       guard let context else {
         return ESP_OK
       }
@@ -70,7 +70,7 @@ struct RootNode: MatterNode {
     guard let node = esp_matter.node.create_raw() else {
       return nil
     }
-    
+
     let context = Context(attribute: attribute, identify: identify)
     withUnsafeMutablePointer(to: &nodeConfig.root_node) {
       // transfer ownership to the node... this is a leak for now
@@ -140,30 +140,30 @@ struct MatterExtendedColorLight: MatterConreteEndpoint {
 
 func print(_ a: Matter.Endpoint.Attribute) {
   switch a {
-    case .onOff: print("onOff")
-    case .levelControl: print("levelControl")
-    case .colorControl(let a):
-      print("colorControl(", terminator: "")
-      print(a, terminator: "")
-      print(")")
-    case .unknown: print("unknown")
+  case .onOff: print("onOff")
+  case .levelControl: print("levelControl")
+  case .colorControl(let a):
+    print("colorControl(", terminator: "")
+    print(a, terminator: "")
+    print(")")
+  case .unknown: print("unknown")
   }
 }
 
 func print(_ a: Matter.Endpoint.ColorControlAttribute, terminator: StaticString) {
   switch a {
-    case .currentHue: print("currentHue", terminator: terminator)
-    case .currentSaturation: print("currentSaturation", terminator: terminator)
-    case .currentX: print("currentX", terminator: terminator)
-    case .currentY: print("currentY", terminator: terminator)
-    case .colorTemperatureMireds: print("colorTemperatureMireds", terminator: terminator)
-    case .colorMode: print("colorMode", terminator: terminator)
+  case .currentHue: print("currentHue", terminator: terminator)
+  case .currentSaturation: print("currentSaturation", terminator: terminator)
+  case .currentX: print("currentX", terminator: terminator)
+  case .currentY: print("currentY", terminator: terminator)
+  case .colorTemperatureMireds: print("colorTemperatureMireds", terminator: terminator)
+  case .colorMode: print("colorMode", terminator: terminator)
   }
 }
 
 enum Matter {
   class Node {
-    var identifyHandler: (()->())? = nil
+    var identifyHandler: (() -> Void)? = nil
 
     var endpoints: [Endpoint] = []
 
@@ -176,42 +176,52 @@ enum Matter {
     init() {
       nvs_flash_init()
 
-      _ = Unmanaged.passRetained(self) // leak
+      _ = Unmanaged.passRetained(self)  // leak
 
-      innerNode = RootNode(attribute: { type, endpoint, cluster, attribute, value in
-        //print("event")
-        guard type == .didSet else { return }
-        for e in self.endpoints {
-          //print(e.id)
-          //print(endpoint.id)
-          if e.id == endpoint.id {
-            let value: Int = Int(value?.pointee.val.u64 ?? 0)
+      innerNode = RootNode(
+        attribute: { type, endpoint, cluster, attribute, value in
+          //print("event")
+          guard type == .didSet else { return }
+          for e in self.endpoints {
+            //print(e.id)
+            //print(endpoint.id)
+            if e.id == endpoint.id {
+              let value: Int = Int(value?.pointee.val.u64 ?? 0)
 
-            var a: Endpoint.Attribute = .unknown(0)
-            if let _ = cluster.as(OnOff.self) {
-              a = .onOff
-              if attribute != 0x0 { return }
-            }
-            if let _ = cluster.as(LevelControl.self) {
-              a = .levelControl
-              if attribute != 0x0 { return }
-            }
-            if let _ = cluster.as(ColorControl.self) {
-              if attribute == 0x00000000 { a = .colorControl(.currentHue) }
-              else if attribute == 0x00000001 { a = .colorControl(.currentSaturation) }
-              else if attribute == 0x00000003 { a = .colorControl(.currentX) }
-              else if attribute == 0x00000004 { a = .colorControl(.currentY) }
-              else if attribute == 0x00000007 { a = .colorControl(.colorTemperatureMireds) }
-              else if attribute == 0x00000008 { a = .colorControl(.colorMode) }
-              else { return }
-            }
+              var a: Endpoint.Attribute = .unknown(0)
+              if let _ = cluster.as(OnOff.self) {
+                a = .onOff
+                if attribute != 0x0 { return }
+              }
+              if let _ = cluster.as(LevelControl.self) {
+                a = .levelControl
+                if attribute != 0x0 { return }
+              }
+              if let _ = cluster.as(ColorControl.self) {
+                if attribute == 0x0000_0000 {
+                  a = .colorControl(.currentHue)
+                } else if attribute == 0x0000_0001 {
+                  a = .colorControl(.currentSaturation)
+                } else if attribute == 0x0000_0003 {
+                  a = .colorControl(.currentX)
+                } else if attribute == 0x0000_0004 {
+                  a = .colorControl(.currentY)
+                } else if attribute == 0x0000_0007 {
+                  a = .colorControl(.colorTemperatureMireds)
+                } else if attribute == 0x0000_0008 {
+                  a = .colorControl(.colorMode)
+                } else {
+                  return
+                }
+              }
 
-            e.eventHandler?(Endpoint.Event(type: type, attribute: a, value: value))
+              e.eventHandler?(Endpoint.Event(type: type, attribute: a, value: value))
+            }
           }
-        }
-      }, identify: { type, endpoint, effect, variant in
-        self.identifyHandler?()
-      })
+        },
+        identify: { type, endpoint, effect, variant in
+          self.identifyHandler?()
+        })
 
       if innerNode == nil {
         print("Unable to create root node")
@@ -222,12 +232,12 @@ enum Matter {
 
   class Endpoint {
     init(node: Node) {
-      _ = Unmanaged.passRetained(self) // leak
+      _ = Unmanaged.passRetained(self)  // leak
     }
 
     var id: Int = 0
 
-    var eventHandler: ((Event)->())? = nil
+    var eventHandler: ((Event) -> Void)? = nil
 
     enum ColorControlAttribute {
       case currentHue
@@ -286,29 +296,28 @@ enum Matter {
     }
   }
 
-
   class Application {
     var rootNode: Node? = nil
 
-    var eventHandler: ((Event)->())? = nil
+    var eventHandler: ((Event) -> Void)? = nil
 
     struct Event {
       var type: Int
     }
 
     init() {
-      _ = Unmanaged.passRetained(self) // leak
+      _ = Unmanaged.passRetained(self)  // leak
     }
 
     func start() {
-      
 
-      esp_matter.start({ event, context in
-        switch Int(event!.pointee.Type) {
-        case chip.DeviceLayer.DeviceEventType.kFabricRemoved: recomissionFabric()
-        default: break
-        }
-      }, 0)
+      esp_matter.start(
+        { event, context in
+          switch Int(event!.pointee.Type) {
+          case chip.DeviceLayer.DeviceEventType.kFabricRemoved: recomissionFabric()
+          default: break
+          }
+        }, 0)
     }
   }
 }

@@ -14,24 +14,23 @@ final class LED {
     case hueSaturation(Int, Int)
     case temperature(Int)
 
-
     var hue: Int {
       switch self {
-        case .hueSaturation(let hue, _): return hue
-        case .temperature: return 0
+      case .hueSaturation(let hue, _): return hue
+      case .temperature: return 0
       }
     }
 
     var saturation: Int {
       switch self {
-        case .hueSaturation(_, let saturation): return saturation
-        case .temperature: return 0
+      case .hueSaturation(_, let saturation): return saturation
+      case .temperature: return 0
       }
     }
   }
 
   var handle: led_driver_handle_t
-  
+
   init() {
     var config = led_driver_get_config()
     let handle = led_driver_init(&config)
@@ -69,4 +68,3 @@ extension LED.Color {
   static var red: LED.Color { .hueSaturation(0, 100) }
   static var blue: LED.Color { .hueSaturation(240, 100) }
 }
-

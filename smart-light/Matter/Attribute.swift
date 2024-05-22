@@ -6,11 +6,9 @@ protocol MatterAttribute {
 
 extension MatterAttribute {
   var value: esp_matter_attr_val_t {
-    get {
-      var val = esp_matter_attr_val_t()
-      esp_matter.attribute.get_val(attribute, &val)
-      return val
-    }
+    var val = esp_matter_attr_val_t()
+    esp_matter.attribute.get_val(attribute, &val)
+    return val
   }
 }
 
@@ -33,14 +31,14 @@ enum MatterAttributeEvent {
 
 func print(_ e: MatterAttributeEvent) {
   switch e {
-    case .willSet: print("willSet")
-    case .didSet: print("didSet")
-    case .read: print("read")
-    case .write: print("write")
+  case .willSet: print("willSet")
+  case .didSet: print("didSet")
+  case .read: print("read")
+  case .write: print("write")
   }
 }
 
-protocol MatterAttributeID: RawRepresentable where RawValue == UInt32 { 
+protocol MatterAttributeID: RawRepresentable where RawValue == UInt32 {
   associatedtype Attribute: MatterAttribute
 }
 
@@ -48,7 +46,7 @@ extension LevelControl {
   struct CurrentLevel: MatterAttribute {
     var attribute: UnsafeMutablePointer<esp_matter.attribute_t>
 
-    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) { 
+    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) {
       self.attribute = attribute
     }
   }
@@ -58,7 +56,7 @@ extension ColorControl {
   struct CurrentHue: MatterAttribute {
     var attribute: UnsafeMutablePointer<esp_matter.attribute_t>
 
-    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) { 
+    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) {
       self.attribute = attribute
     }
   }
@@ -66,7 +64,7 @@ extension ColorControl {
   struct CurrentSaturation: MatterAttribute {
     var attribute: UnsafeMutablePointer<esp_matter.attribute_t>
 
-    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) { 
+    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) {
       self.attribute = attribute
     }
   }
@@ -74,7 +72,7 @@ extension ColorControl {
   struct CurrentX: MatterAttribute {
     var attribute: UnsafeMutablePointer<esp_matter.attribute_t>
 
-    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) { 
+    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) {
       self.attribute = attribute
     }
   }
@@ -82,7 +80,7 @@ extension ColorControl {
   struct CurrentY: MatterAttribute {
     var attribute: UnsafeMutablePointer<esp_matter.attribute_t>
 
-    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) { 
+    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) {
       self.attribute = attribute
     }
   }
@@ -90,7 +88,7 @@ extension ColorControl {
   struct ColorTemperatureMireds: MatterAttribute {
     var attribute: UnsafeMutablePointer<esp_matter.attribute_t>
 
-    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) { 
+    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) {
       self.attribute = attribute
     }
   }
@@ -98,7 +96,7 @@ extension ColorControl {
   struct ColorMode: MatterAttribute {
     var attribute: UnsafeMutablePointer<esp_matter.attribute_t>
 
-    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) { 
+    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) {
       self.attribute = attribute
     }
   }
@@ -108,7 +106,7 @@ extension OnOff {
   struct OnOffState: MatterAttribute {
     var attribute: UnsafeMutablePointer<esp_matter.attribute_t>
 
-    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) { 
+    init(_ attribute: UnsafeMutablePointer<esp_matter.attribute_t>) {
       self.attribute = attribute
     }
   }
