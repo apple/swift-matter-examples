@@ -1,6 +1,7 @@
 # Embedded Swift Matter Example: Empty application template
 
-> Important: We highly recommend following along with the [Explore the LED Blink example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-led-blink) and [Explore the Smart Light example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-smart-light) tutorials before using the empty application template.
+> [!IMPORTANT]
+> We highly recommend following along with the [Explore the LED Blink example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-led-blink) and [Explore the Smart Light example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-smart-light) tutorials before using the empty application template.
 
 This directory contains the simplest empty template to start writing Embedded Swift that can be built using the ESP IDF, and uploaded to an ESP32C6 development board.
 

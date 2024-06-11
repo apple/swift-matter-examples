@@ -8,7 +8,8 @@ Build a Matter accessory using Embedded Swift
 
 This repository contains an example simple Embedded Swift application that implements a Matter smart light accessory and can be used from HomeKit. The examples use an ESP32-C6 (RISC-V) microcontroller and build on top of the ESP-IDF and ESP-Matter SDKs.
 
-> Note: This repository is associated with WWDC24 session 10197: [Go small with Embedded Swift](https://developer.apple.com/wwdc24/10197).
+> [!NOTE]
+> This repository is associated with WWDC24 session 10197: [Go small with Embedded Swift](https://developer.apple.com/wwdc24/10197).
 
 #### Embedded Swift
 
@@ -42,13 +43,15 @@ Before running the examples, ensure you have the following tools available:
   - [ESP-IDF 5.2.1](https://docs.espressif.com/projects/esp-idf/en/v5.2.1/esp32c6/get-started/index.html)
   - [ESP-Matter SDK 1.2](https://docs.espressif.com/projects/esp-matter/en/latest/esp32c6/introduction.html)
 
-> Important: The examples are designed for an Espressif C6 Development Kit from both macOS and Linux host systems. Other configurations may work, but have not been tested.
+> [!IMPORTANT]
+> The examples are designed for an Espressif C6 Development Kit from both macOS and Linux host systems. Other configurations may work, but have not been tested.
 
 ### Quick Start Guide
 
-> Important: We highly recommend following the provided [tutorials](https://apple.github.io/swift-matter-examples/tutorials/tutorial-table-of-contents).
+> [!IMPORTANT]
+> We highly recommend following the provided [tutorials](https://apple.github.io/swift-matter-examples/tutorials/tutorial-table-of-contents).
 
-Ensure your shell has access to the tools listed above, see [Get started on macOS](https://apple.github.io/swift-matter-examples/tutorials/tutorials/swiftmatterexamples/setup-macos) or [Get started on Linux with Docker](https://apple.github.io/swift-matter-examples/tutorials/tutorials/swiftmatterexamples/setup-linux) for additional setup instructions.
+Ensure your shell has access to the tools listed above, see [Get started on macOS](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/setup-macos) or [Get started on Linux with Docker](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/setup-linux) for additional setup instructions.
 
 1. Clone the repository and navigate to one of the examples.
   ```shell
