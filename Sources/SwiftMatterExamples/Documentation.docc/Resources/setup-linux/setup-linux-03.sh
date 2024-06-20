@@ -10,5 +10,5 @@ $ docker build . --tag swift-matter-examples-builder
 $ python3 -m pip install esptool --user
 
 # Find your attached microcontroller
-$ ls /dev/cu.usbserial-*
-/dev/cu.usbserial-10
+$ ls /dev/ttyUSB*
+/dev/ttyUSB0

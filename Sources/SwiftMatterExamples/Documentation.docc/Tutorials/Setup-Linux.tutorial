@@ -46,7 +46,7 @@
     
     @Steps {
       @Step {
-        Find your attached microcontroller; on a macOS host computer the microcontroller should appear as a special file with the format **`/dev/cu.usbserial-X...`**.
+        Find your attached microcontroller; on a Linux host computer the microcontroller should appear as a special file with the format **`/dev/ttyUSB...`**.
         
         Ensure your microcontroller is connected over USB before looking for the device.
         
