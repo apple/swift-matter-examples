@@ -13,7 +13,7 @@
     @Image(source: "arrow.down.circle.png", alt: "FIXME-ALT")
     
     @TutorialReference(tutorial: "doc:Setup-MacOS")
-    @TutorialReference(tutorial: "doc:Setup-Linux")
+    @TutorialReference(tutorial: "doc:Setup-Docker")
   }
   
   @Chapter(name: "Run the examples") {

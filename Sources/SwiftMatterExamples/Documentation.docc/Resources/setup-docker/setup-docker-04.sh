@@ -10,5 +10,13 @@ $ docker build . --tag swift-matter-examples-builder
 $ python3 -m pip install esptool --user
 
 # Find your attached microcontroller
+# On macOS it usually attaches on /dev/cu.usbserial-10
+$ ls /dev/cu.usbserial-*
+/dev/cu.usbserial-10
+
+# On Linux it usually attaches on /dev/ttyUSB0
 $ ls /dev/ttyUSB*
 /dev/ttyUSB0
+
+# Run the serial server
+$ esp_rfc2217_server.py -v -p 4000 /dev/cu.usbserial-10

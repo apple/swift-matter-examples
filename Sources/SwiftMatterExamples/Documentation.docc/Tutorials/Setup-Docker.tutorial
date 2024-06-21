@@ -1,5 +1,5 @@
 @Tutorial(time: 30) {
-  @Intro(title: "Get started on Linux with Docker") {
+  @Intro(title: "Get started on with Docker") {
     Install the tools needed to build an ESP Matter accessory on Linux using a Docker container.
   }
   
@@ -18,7 +18,7 @@
         
         The `Dockerfile` in swift-matter-examples has all of the steps needed for a working build environment, many of which are the same steps described in the <doc:Setup-MacOS> tutorial. 
 
-        @Code(name: "Setup.shell", file: "setup-linux-00.sh")
+        @Code(name: "Setup.shell", file: "setup-docker-00.sh")
       }
       
       @Step {
@@ -26,7 +26,7 @@
         
         Building the image may take a significant amount of time to download and build all the required dependencies.
         
-        @Code(name: "Setup.shell", file: "setup-linux-01.sh", previousFile: "setup-linux-00.sh") 
+        @Code(name: "Setup.shell", file: "setup-docker-01.sh", previousFile: "setup-docker-00.sh") 
       }
       
       @Step {
@@ -34,7 +34,7 @@
         
         The `esptool` package contains `esp_rfc2217_server`, a program needed to flash the microcontroller from a docker container.
 
-        @Code(name: "Setup.shell", file: "setup-linux-02.sh", previousFile: "setup-linux-01.sh") 
+        @Code(name: "Setup.shell", file: "setup-docker-02.sh", previousFile: "setup-docker-01.sh") 
       }
     }
   }
@@ -46,17 +46,17 @@
     
     @Steps {
       @Step {
-        Find your attached microcontroller; on a Linux host computer the microcontroller should appear as a special file with the format **`/dev/ttyUSB...`**.
+        Find your attached microcontroller; the microcontroller should appear as a special file with the format **`/dev/cu.usbserial-...`** on macOS and **`/dev/ttyUSB...`** on Linux.
         
         Ensure your microcontroller is connected over USB before looking for the device.
         
-        @Code(name: "Setup.shell", file: "setup-linux-03.sh", previousFile: "setup-linux-02.sh") 
+        @Code(name: "Setup.shell", file: "setup-docker-03.sh", previousFile: "setup-docker-02.sh") 
       }
       
       @Step {
         Run `esp_rfc2217_server` on your host machine to proxy the microcontroller serial connection to docker, see [Using Remote Serial Port](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/tools/idf-docker-image.html#using-remote-serial-port) for instructions.
         
-        @Code(name: "Setup.shell", file: "setup-linux-04.sh", previousFile: "setup-linux-03.sh") 
+        @Code(name: "Setup.shell", file: "setup-docker-04.sh", previousFile: "setup-docker-03.sh") 
       }
 
       @Step {
@@ -64,7 +64,7 @@
         
         > Important: Be sure to run the container from the root directory of swift-matter-examples.  
 
-        @Code(name: "Setup.shell", file: "setup-linux-05.sh", previousFile: "setup-linux-04.sh") 
+        @Code(name: "Setup.shell", file: "setup-docker-05.sh", previousFile: "setup-docker-04.sh") 
       }
     }
   }
