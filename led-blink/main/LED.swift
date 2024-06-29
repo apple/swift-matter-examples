@@ -79,6 +79,7 @@ final class LED {
 }
 
 extension LED.Color {
+  static var green: LED.Color { .hueSaturation(120, 100) }
   static var red: LED.Color { .hueSaturation(0, 100) }
   static var blue: LED.Color { .hueSaturation(240, 100) }
 }
