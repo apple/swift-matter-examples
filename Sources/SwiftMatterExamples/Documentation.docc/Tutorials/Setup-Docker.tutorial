@@ -1,5 +1,5 @@
 @Tutorial(time: 30) {
-  @Intro(title: "Get started on with Docker") {
+  @Intro(title: "Get started on a Linux Docker container") {
     Install the tools needed to build an ESP Matter accessory on Linux using a Docker container.
   }
   
