@@ -59,4 +59,10 @@ func app_main() {
   let app = Matter.Application()
   app.rootNode = rootNode
   app.start()
+
+  // Keep local variables alive. Workaround for issue #10
+  // https://github.com/apple/swift-matter-examples/issues/10
+  while true {
+    sleep(1)
+  }
 }
