@@ -41,18 +41,11 @@ class PWM {
         hpoint:     0,
         flags:      .init(output_invert: 0) 
   )
-// esp_err_t ledc_set_duty(ledc_mode_t speed_mode, ledc_channel_t channel, uint32_t duty)
- //   guard led_strip_new_spi_device(&stripConfig, &spiConfig, &handle) == ESP_OK else {
- //     fatalError("cannot configure spi device")
-  //  }
-//  func setDuty (mode: ledc_mode_t ,channel: ledc_channel_t , duty: UInt32) {
   func setDuty (duty: UInt32) {
- // 	ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, duty);
     guard ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, duty) == ESP_OK else {
       fatalError("cannot set ledc duty")
     }
   }
-//  // ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
   func updateDuty() {
       guard ledc_update_duty( ledc_channel.speed_mode ,ledc_channel.channel) == ESP_OK else {
         fatalError("cannot update ledc duty")
