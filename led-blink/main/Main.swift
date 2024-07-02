@@ -13,15 +13,24 @@
 func app_main() {
   print("🏎️   Hello, Embedded Swift! (LED Blink)")
 
-  let led = LED()
-  led.color = .red
-  led.brightness = 10
+  let led = initLED(color: .red, brightness: 10)
 
   while true {
     sleep(1)
-    led.enabled.toggle()
-    if led.enabled {
-      led.color = .hueSaturation(Int.random(in: 0 ..< 360), 100)
-    }
+    toggleLED(led: led)
+  }
+}
+
+func initLED(color: LED.Color, brightness: Int) -> LED {
+  let led = LED()
+  led.color = color
+  led.brightness = brightness
+  return led
+}
+
+func toggleLED(led: LED) {
+  led.enabled.toggle()
+  if led.enabled {
+    led.color = .hueSaturation(Int.random(in: 0 ..< 360), 100)
   }
 }
