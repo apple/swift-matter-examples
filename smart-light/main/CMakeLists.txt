@@ -46,6 +46,8 @@ target_compile_options(${COMPONENT_LIB} PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:SHEL
         -Xcc -D_GLIBCXX_HAVE_POSIX_SEMAPHORE 
         -Xcc -D_GLIBCXX_USE_POSIX_SEMAPHORE 
         -Xcc -D_POSIX_READER_WRITER_LOCKS
+        -Xcc -march=rv32imc_zicsr_zifencei
+        -Xcc -mabi=ilp32
 
         -pch-output-dir /tmp
         -Xfrontend -enable-single-module-llvm-emission
