@@ -51,7 +51,7 @@ Before running the examples, ensure you have the following tools available:
 > [!IMPORTANT]
 > We highly recommend following the provided [tutorials](https://apple.github.io/swift-matter-examples/tutorials/tutorial-table-of-contents).
 
-Ensure your shell has access to the tools listed above, see [Get started on macOS](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/setup-macos) or [Get started on Linux with Docker](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/setup-linux) for additional setup instructions.
+Ensure your shell has access to the tools listed above, see [Get started on macOS](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/setup-macos) or [Get started on Linux with Docker](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/setup-docker) for additional setup instructions.
 
 1. Clone the repository and navigate to one of the examples.
   ```shell
