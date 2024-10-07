@@ -22,6 +22,19 @@ foreach(dir ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
     string(CONCAT SWIFT_INCLUDES ${SWIFT_INCLUDES} "-I${dir} ")
 endforeach()
 
+# Set device-specific march/mabi flags
+idf_build_get_property(target IDF_TARGET)
+if(${target} STREQUAL "esp32c2" OR ${target} STREQUAL "esp32c3")
+    set(march_flag "rv32imc_zicsr_zifencei")
+    set(mabi_flag "ilp32")
+elseif(${target} STREQUAL "esp32p4")
+    set(march_flag "rv32imafc_zicsr_zifencei")
+    set(mabi_flag "ilp32f")
+else()
+    set(march_flag "rv32imac_zicsr_zifencei")
+    set(mabi_flag "ilp32")
+endif()
+
 # Swift compiler flags to build in Embedded Swift mode, optimize for size, choose the right ISA, ABI, C++ language standard, etc.
 target_compile_options(${COMPONENT_LIB} PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:SHELL:
         -target riscv32-none-none-eabi
@@ -46,6 +59,8 @@ target_compile_options(${COMPONENT_LIB} PUBLIC "$<$<COMPILE_LANGUAGE:Swift>:SHEL
         -Xcc -D_GLIBCXX_HAVE_POSIX_SEMAPHORE 
         -Xcc -D_GLIBCXX_USE_POSIX_SEMAPHORE 
         -Xcc -D_POSIX_READER_WRITER_LOCKS
+        -Xcc -march=${march_flag}
+        -Xcc -mabi=${mabi_flag}
 
         -pch-output-dir /tmp
         -Xfrontend -enable-single-module-llvm-emission
