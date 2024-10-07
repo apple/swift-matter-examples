@@ -17,7 +17,7 @@ Breakdown of the files included:
 
 ## Building and running the example
 
-For full steps how to build the example code, follow the [Setup Your Environment](https://apple.github.io/swift-embedded/swift-matter-examples/tutorials/tutorial-table-of-contents#setup-your-environment) tutorials and the [Explore the LED Blink example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-led-blink) tutorial. In summary:
+For full steps how to build the example code, follow the [Setup Your Environment](https://apple.github.io/swift-matter-examples/tutorials/tutorial-table-of-contents#setup-your-environment) tutorials and the [Explore the LED Blink example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-led-blink) tutorial. In summary:
 
 - Ensure your system has all the required software installed and your shell has access to the tools listed in the top-level README file.
 - Plug in the ESP32C6 development board via a USB cable.
