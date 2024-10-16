@@ -37,7 +37,6 @@ Before running the examples, ensure you have the following tools available:
 
 - Hardware:
   - [ESP32-C6-DevKitC-1-N8](https://docs.espressif.com/projects/espressif-esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html)
-  - The `smart-light` example is also tested using [Wemos C3 mini](https://www.wemos.cc/en/latest/c3/c3_mini.html)
 - Software
   - [Swift Nightly Toolchain](https://www.swift.org/download)
   - [CMake 3.29+](https://cmake.org/download)
@@ -60,14 +59,9 @@ Ensure your shell has access to the tools listed above, see [Get started on macO
   $ cd swift-matter-examples/smart-light
   ```
 
-2. Configure the build system for your microcontroller.
+2. Configure the build system for your microcontroller, the `smart-light` example should also be runnable on `esp32c3`.
   ```shell
   $ idf.py set-target esp32c6
-  ```
-
-or (if using ESP32C3)
-  ```shell
-  $ idf.py set-target esp32c3
   ```
 
 3. Build and deploy the application to your device.

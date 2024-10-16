@@ -37,14 +37,9 @@ For full steps how to build the example code, follow the [Setup Your Environment
   $ cd swift-matter-examples/smart-light
   ```
 
-2. Configure the build system for your microcontroller.
+2. Configure the build system for your microcontroller, this example should also be runnable on `esp32c3`.
   ```shell
   $ idf.py set-target esp32c6
-  ```
-
-or (if using ESP32C3)
-  ```shell
-  $ idf.py set-target esp32c3
   ```
 
 3. Build and deploy the application to your device.
