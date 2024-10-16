@@ -6,7 +6,7 @@ Build a Matter accessory using Embedded Swift
 
 <!-- Image -->
 
-This repository contains an example simple Embedded Swift application that implements a Matter smart light accessory and can be used from HomeKit. The examples use an ESP32-C6 (RISC-V) microcontroller and build on top of the ESP-IDF and ESP-Matter SDKs.
+This repository contains an example simple Embedded Swift application that implements a Matter smart light accessory and can be used from HomeKit. The examples use an ESP32-C6 or ESP32-C3 (RISC-V) microcontroller and build on top of the ESP-IDF and ESP-Matter SDKs.
 
 > [!NOTE]
 > This repository is associated with WWDC24 session 10197: [Go small with Embedded Swift](https://developer.apple.com/wwdc24/10197).
@@ -37,7 +37,7 @@ Before running the examples, ensure you have the following tools available:
 
 - Hardware:
   - [ESP32-C6-DevKitC-1-N8](https://docs.espressif.com/projects/espressif-esp-dev-kits/en/latest/esp32c6/esp32-c6-devkitc-1/user_guide.html)
-- Software 
+- Software
   - [Swift Nightly Toolchain](https://www.swift.org/download)
   - [CMake 3.29+](https://cmake.org/download)
   - [ESP-IDF 5.2.1](https://docs.espressif.com/projects/esp-idf/en/v5.2.1/esp32c6/get-started/index.html)
@@ -59,17 +59,17 @@ Ensure your shell has access to the tools listed above, see [Get started on macO
   $ cd swift-matter-examples/smart-light
   ```
 
-2. Configure the build system for your microcontroller.
+2. Configure the build system for your microcontroller, the `smart-light` example should also be runnable on `esp32c3`.
   ```shell
   $ idf.py set-target esp32c6
   ```
 
-3. Build and deploy the application to your device. 
+3. Build and deploy the application to your device.
   ```shell
   $ idf.py build flash monitor
   ```
 
-Explore the implementation, see [Explore the LED Blink example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-led-blink#Understand-the-code) and 
+Explore the implementation, see [Explore the LED Blink example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-led-blink#Understand-the-code) and
 [Explore the Smart Light example](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/run-example-smart-light#Understand-the-code) for guided walkthroughs.
 
 ## Contributing to Swift Matter Examples
