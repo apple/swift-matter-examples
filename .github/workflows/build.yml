@@ -1,0 +1,58 @@
+name: Build Matter Examples
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Build on Mondays at 9am PST every week
+    - cron: '0 17 * * 1'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: espressif/esp-matter:latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [empty-template, led-blink, smart-light]
+        swift: [swift-DEVELOPMENT-SNAPSHOT-2024-12-13-a]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Swift ${{ matrix.swift }} & CMake
+        run: |
+            set -vex
+
+            wget -q https://download.swift.org/development/ubuntu2404/${{ matrix.swift }}/${{ matrix.swift }}-ubuntu24.04.tar.gz
+            tar xzf ${{ matrix.swift }}-ubuntu24.04.tar.gz
+            export PATH="$PATH:`pwd`/${{ matrix.swift }}-ubuntu24.04/usr/bin/"
+            swiftc --version
+
+            wget https://github.com/Kitware/CMake/releases/download/v3.30.2/cmake-3.30.2-linux-x86_64.tar.gz
+            tar xzf cmake-3.30.2-linux-x86_64.tar.gz
+            export PATH="`pwd`/cmake-3.30.2-linux-x86_64/bin:$PATH"
+            cmake --version
+
+            echo "PATH=$PATH" >> $GITHUB_ENV
+
+      - name: Build with idf.py
+        run: |
+            pwd
+            cd /opt/espressif/esp-idf
+            . ./export.sh
+            cd -
+            cd /opt/espressif/esp-matter
+            . ./export.sh
+            cd -
+            cd ${{ matrix.example }}/
+            idf.py set-target esp32c6 &&
+            idf.py build
