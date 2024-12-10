@@ -38,6 +38,8 @@
 //
 // connectedhomeip/src/credentials/FabricTable.h:82:69: error: use of undeclared identifier 'strnlen'
 extern "C" size_t strnlen(const char *s, size_t maxlen);
+// esp-matter/components/esp_matter/esp_matter_client.h:57:26: error: use of undeclared identifier 'strdup'
+extern "C" char *strdup(const char *s1);
 
 #include <esp_matter.h>
 #include <esp_matter_cluster.h>
