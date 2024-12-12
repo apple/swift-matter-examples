@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install apt dependencies
-        run: apt-get -qq update && apt-get -qq -y install curl
+        run: sudo apt-get -qq update && sudo apt-get -qq -y install curl
 
       - name: Compare against swift-mmio swift-format config
         run: |
