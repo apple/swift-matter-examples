@@ -36,17 +36,17 @@ struct RootNode: MatterNode {
     MatterAttributeEvent, Endpoint, Cluster, UInt32,
     UnsafeMutablePointer<esp_matter_attr_val_t>?
   ) -> Void
-  typealias identifyCallback = (
+  typealias IdentifyCallback = (
     esp_matter.identification.callback_type_t, UInt16, UInt8, UInt8
   ) -> Void
 
   final class Context {
     var attribute: AttributeCallback
-    var identify: identifyCallback
+    var identify: IdentifyCallback
 
     init(
       attribute: @escaping AttributeCallback,
-      identify: @escaping identifyCallback
+      identify: @escaping IdentifyCallback
     ) {
       self.attribute = attribute
       self.identify = identify
@@ -57,7 +57,7 @@ struct RootNode: MatterNode {
   let context: Context
 
   init?(
-    attribute: @escaping AttributeCallback, identify: @escaping identifyCallback
+    attribute: @escaping AttributeCallback, identify: @escaping IdentifyCallback
   ) {
     var nodeConfig = esp_matter.node.config_t()
     esp_matter.attribute.set_callback_shim {

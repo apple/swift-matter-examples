@@ -32,8 +32,6 @@ protocol MatterConcreteCluster: MatterCluster {
 struct ClusterID<Cluster: MatterCluster>: RawRepresentable {
   var rawValue: UInt32
 
-  init(rawValue: UInt32) { self.rawValue = rawValue }
-
   static var identify: ClusterID<Identify> { .init(rawValue: 0x0000_0003) }
   static var onOff: ClusterID<OnOff> { .init(rawValue: 0x0000_0006) }
   static var levelControl: ClusterID<LevelControl> {
@@ -65,8 +63,6 @@ struct Identify: MatterConcreteCluster {
   static var clusterTypeId: ClusterID<Self> { .identify }
   struct AttributeID<Attribute: MatterAttribute>: MatterAttributeID {
     var rawValue: UInt32
-
-    init(rawValue: UInt32) { self.rawValue = rawValue }
   }
 
   var cluster: UnsafeMutablePointer<esp_matter.cluster_t>
@@ -86,8 +82,6 @@ struct OnOff: MatterConcreteCluster {
   static var clusterTypeId: ClusterID<Self> { .onOff }
   struct AttributeID<Attribute: MatterAttribute>: MatterAttributeID {
     var rawValue: UInt32
-
-    init(rawValue: UInt32) { self.rawValue = rawValue }
 
     static var state: AttributeID<OnOffState> { .init(rawValue: 0x0000_0000) }
   }
@@ -111,8 +105,6 @@ struct LevelControl: MatterConcreteCluster {
   static var clusterTypeId: ClusterID<Self> { .levelControl }
   struct AttributeID<Attribute: MatterAttribute>: MatterAttributeID {
     var rawValue: UInt32
-
-    init(rawValue: UInt32) { self.rawValue = rawValue }
 
     static var currentLevel: AttributeID<CurrentLevel> {
       .init(rawValue: 0x0000_0000)
@@ -138,8 +130,6 @@ struct ColorControl: MatterConcreteCluster {
   static var clusterTypeId: ClusterID<Self> { .colorControl }
   struct AttributeID<Attribute: MatterAttribute>: MatterAttributeID {
     var rawValue: UInt32
-
-    init(rawValue: UInt32) { self.rawValue = rawValue }
 
     static var currentHue: AttributeID<CurrentHue> {
       .init(rawValue: 0x0000_0000)

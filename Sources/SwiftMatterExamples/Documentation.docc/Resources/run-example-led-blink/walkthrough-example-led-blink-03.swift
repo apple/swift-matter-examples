@@ -10,7 +10,7 @@
 //===----------------------------------------------------------------------===//
 
 @_cdecl("app_main")
-func app_main() {
+func main() {
   print("🏎️   Hello, Embedded Swift! (LED Blink)")
 
   let led = LED()
