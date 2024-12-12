@@ -30,8 +30,8 @@ jobs:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
     with:
-      api_breakage_check_enabled: false
-      docs_check_enabled: false
-      license_header_check_enabled: false
-      license_header_check_project_name: ""
-      unacceptable_language_check_enabled: false
+      api_breakage_check_enabled: false  # this repo doesn't vend any API
+      license_header_check_enabled: false  # incorrectly flags this github workflow yml file
+      license_header_check_project_name: ""  # bug: https://github.com/swiftlang/github-workflows/issues/76
+      shell_check_enabled: false  # incorrectly flags tutorial content
+      unacceptable_language_check_enabled: false  # incorrectly flags "master" in external branch names
