@@ -67,14 +67,17 @@ struct RootNode: MatterNode {
       }
       guard let e = Endpoint(id: endpoint) else { return ESP_OK }
       guard let c = Cluster(endpoint: e, id: cluster) else { return ESP_OK }
+      guard let event = MatterAttributeEvent(rawValue: type.rawValue) else {
+        fatalError("Unknown event type")
+      }
       let ctx = Unmanaged<Context>.fromOpaque(context).takeUnretainedValue()
-      ctx.attribute(
-        MatterAttributeEvent(rawValue: type.rawValue)!, e, c, attribute, value)
+      ctx.attribute(event, e, c, attribute, value)
       return ESP_OK
     }
     esp_matter.identification.set_callback {
       type, endpoint, effect, variant, context in
-      Unmanaged<Context>.fromOpaque(context!).takeUnretainedValue().identify(
+      guard let context else { fatalError("context must be non-nil") }
+      Unmanaged<Context>.fromOpaque(context).takeUnretainedValue().identify(
         type, endpoint, effect, variant)
       return ESP_OK
     }

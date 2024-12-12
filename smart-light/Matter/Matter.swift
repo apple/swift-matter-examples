@@ -21,7 +21,7 @@ extension Matter {
       endpoints.append(endpoint)
     }
 
-    var innerNode: RootNode!
+    var innerNode: RootNode
 
     init() {
       // Initialize persistent storage.
@@ -31,9 +31,13 @@ extension Matter {
       _ = Unmanaged.passRetained(self)
 
       // Create the actual root node object, wire up callbacks.
-      innerNode = RootNode(
+      let root = RootNode(
         attribute: self.eventHandler,
-        identify: { _, _, _, _ in self.identifyHandler?() })!
+        identify: { _, _, _, _ in self.identifyHandler?() })
+      guard let root else {
+        fatalError("Failed to setup root node.")
+      }
+      self.innerNode = root
     }
 
     func eventHandler(
@@ -158,7 +162,8 @@ extension Matter {
     var rootNode: Node? = nil
 
     init() {
-      // For now, leak the object, to be able to use local variables to declare it. We don't expect this object to be created and destroyed repeatedly.
+      // For now, leak the object, to be able to use local variables to declare
+      // it. We don't expect this object to be created and destroyed repeatedly.
       _ = Unmanaged.passRetained(self)
     }
 
@@ -166,7 +171,9 @@ extension Matter {
       func callback(
         event: UnsafePointer<chip.DeviceLayer.ChipDeviceEvent>?, context: Int
       ) {
-        switch Int(event!.pointee.Type) {
+        // Ignore callback if event not set.
+        guard let event else { return }
+        switch Int(event.pointee.Type) {
         case chip.DeviceLayer.DeviceEventType.kFabricRemoved:
           recomissionFabric()
         default: break

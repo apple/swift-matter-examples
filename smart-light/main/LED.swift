@@ -74,7 +74,7 @@ final class LED {
     let handle = led_driver_init(&config)
     guard let handle else { fatalError("Failed to initialize handle") }
     led_driver_set_power(handle, true)
-    self.handle = handle!
+    self.handle = handle
   }
 
 }
