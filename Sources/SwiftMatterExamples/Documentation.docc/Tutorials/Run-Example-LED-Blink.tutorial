@@ -64,16 +64,14 @@
 
     @Steps {
       @Step {
-        We start the application by declaring an **`app_main`** function with a print statement to show the application has started.
-
-        `app_main` serves the same purpose as a `main` function in a traditional user-land application and acts as the primary entry point for our firmware application.
+        We start the application by declaring an **`main`** function with a print statement to show the application has started.
 
         @Code(name: "Main.swift", file: "walkthrough-example-led-blink-01.swift", previousFile: "walkthrough-example-led-blink-00.swift")
       }
 
       @Step {
         We use the **`@_cdecl("app_main")`** attribute to generate a wrapper C symbol which is expected by ESP IDF.
-        
+
         > Important: Underscored attributes, like `@_cdecl`, are unstable features of the Swift compiler and may change behavior or break between compiler versions.        
 
         @Code(name: "Main.swift", file: "walkthrough-example-led-blink-02.swift", previousFile: "walkthrough-example-led-blink-01.swift")

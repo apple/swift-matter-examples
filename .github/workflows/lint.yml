@@ -1,0 +1,33 @@
+name: Lint
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  validate_format_config:
+    name: Validate Format Config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install apt dependencies
+        run: sudo apt-get -qq update && sudo apt-get -qq -y install curl
+
+      - name: Compare against swift-mmio swift-format config
+        run: |
+          curl -sL https://raw.githubusercontent.com/apple/swift-mmio/refs/heads/main/SupportingFiles/Tools/swift-format/.swift-format -o .swift-format-mmio
+          diff .swift-format .swift-format-mmio
+
+  soundness:
+    name: Soundness
+    uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
+    with:
+      api_breakage_check_enabled: false  # this repo doesn't vend any API
+      license_header_check_enabled: false  # incorrectly flags this github workflow yml file
+      license_header_check_project_name: ""  # bug: https://github.com/swiftlang/github-workflows/issues/76
+      shell_check_enabled: false  # incorrectly flags tutorial content
+      unacceptable_language_check_enabled: false  # incorrectly flags "master" in external branch names

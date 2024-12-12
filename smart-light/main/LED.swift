@@ -53,27 +53,28 @@ final class LED {
     // Hue range is 0 ..< 360.
     var hue: Int {
       switch self {
-        case .hueSaturation(let hue, _): return hue
-        case .temperature: return 0
+      case .hueSaturation(let hue, _): return hue
+      case .temperature: return 0
       }
     }
 
     // Saturation is 0 ... 100.
     var saturation: Int {
       switch self {
-        case .hueSaturation(_, let saturation): return saturation
-        case .temperature: return 0
+      case .hueSaturation(_, let saturation): return saturation
+      case .temperature: return 0
       }
     }
   }
 
   var handle: led_driver_handle_t
-  
+
   init() {
     var config = led_driver_get_config()
     let handle = led_driver_init(&config)
+    guard let handle else { fatalError("Failed to initialize handle") }
     led_driver_set_power(handle, true)
-    self.handle = handle!
+    self.handle = handle
   }
 
 }

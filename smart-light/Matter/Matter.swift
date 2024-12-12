@@ -9,7 +9,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-enum Matter { }
+enum Matter {}
 
 extension Matter {
   class Node {
@@ -21,7 +21,7 @@ extension Matter {
       endpoints.append(endpoint)
     }
 
-    var innerNode: RootNode!
+    var innerNode: RootNode
 
     init() {
       // Initialize persistent storage.
@@ -31,14 +31,27 @@ extension Matter {
       _ = Unmanaged.passRetained(self)
 
       // Create the actual root node object, wire up callbacks.
-      innerNode = RootNode(attribute: self.eventHandler, identify: { _, _, _, _ in self.identifyHandler?() })!
+      let root = RootNode(
+        attribute: self.eventHandler,
+        identify: { _, _, _, _ in self.identifyHandler?() })
+      guard let root else {
+        fatalError("Failed to setup root node.")
+      }
+      self.innerNode = root
     }
 
-    func eventHandler(type: MatterAttributeEvent, endpoint: __idf_main.Endpoint, cluster: Cluster, attribute: UInt32, value: UnsafeMutablePointer<esp_matter_attr_val_t>?) {
+    func eventHandler(
+      type: MatterAttributeEvent, endpoint: __idf_main.Endpoint,
+      cluster: Cluster, attribute: UInt32,
+      value: UnsafeMutablePointer<esp_matter_attr_val_t>?
+    ) {
       guard type == .didSet else { return }
-      guard let e = self.endpoints.first(where: { $0.id == endpoint.id }) else { return }
+      guard let e = self.endpoints.first(where: { $0.id == endpoint.id }) else {
+        return
+      }
       let value: Int = Int(value?.pointee.val.u64 ?? 0)
-      guard let a = Endpoint.Attribute(cluster: cluster, attribute: attribute) else { return }
+      guard let a = Endpoint.Attribute(cluster: cluster, attribute: attribute)
+      else { return }
       e.eventHandler?(Endpoint.Event(type: type, attribute: a, value: value))
     }
   }
@@ -76,27 +89,34 @@ extension Matter {
           case OnOff.AttributeID<OnOff.OnOffState>.state.rawValue: self = .onOff
           default: return nil
           }
-        }
-        else
-        if let _ = cluster.as(LevelControl.self) {
+        } else if let _ = cluster.as(LevelControl.self) {
           switch attribute {
-          case LevelControl.AttributeID<LevelControl.CurrentLevel>.currentLevel.rawValue: self = .levelControl
+          case LevelControl.AttributeID<LevelControl.CurrentLevel>.currentLevel
+            .rawValue:
+            self = .levelControl
           default: return nil
           }
-        }
-        else
-        if let _ = cluster.as(ColorControl.self) {
+        } else if let _ = cluster.as(ColorControl.self) {
           switch attribute {
-          case ColorControl.AttributeID<ColorControl.CurrentHue>.currentHue.rawValue: self = .colorControl(.currentHue)
-          case ColorControl.AttributeID<ColorControl.CurrentSaturation>.currentSaturation.rawValue: self = .colorControl(.currentSaturation)
-          case ColorControl.AttributeID<ColorControl.CurrentX>.currentX.rawValue: self = .colorControl(.currentX)
-          case ColorControl.AttributeID<ColorControl.CurrentY>.currentY.rawValue: self = .colorControl(.currentY)
-          case ColorControl.AttributeID<ColorControl.ColorTemperatureMireds>.colorTemperatureMireds.rawValue: self = .colorControl(.colorTemperatureMireds)
-          case ColorControl.AttributeID<ColorControl.ColorMode>.colorMode.rawValue: self = .colorControl(.colorMode)
+          case ColorControl.AttributeID<ColorControl.CurrentHue>.currentHue
+            .rawValue:
+            self = .colorControl(.currentHue)
+          case ColorControl.AttributeID<ColorControl.CurrentSaturation>
+            .currentSaturation.rawValue:
+            self = .colorControl(.currentSaturation)
+          case ColorControl.AttributeID<ColorControl.CurrentX>.currentX.rawValue:
+            self = .colorControl(.currentX)
+          case ColorControl.AttributeID<ColorControl.CurrentY>.currentY.rawValue:
+            self = .colorControl(.currentY)
+          case ColorControl.AttributeID<ColorControl.ColorTemperatureMireds>
+            .colorTemperatureMireds.rawValue:
+            self = .colorControl(.colorTemperatureMireds)
+          case ColorControl.AttributeID<ColorControl.ColorMode>.colorMode
+            .rawValue:
+            self = .colorControl(.colorMode)
           default: return nil
           }
-        }
-        else {
+        } else {
           self = .unknown(attribute)
         }
       }
@@ -119,13 +139,17 @@ extension Matter {
       lightConfig.on_off.on_off = true
       lightConfig.level_control.current_level = .init(64)
       lightConfig.level_control.lighting.start_up_current_level = .init(64)
-      lightConfig.color_control.color_mode = chip.app.Clusters.ColorControl.ColorMode.colorTemperature.rawValue
-      lightConfig.color_control.enhanced_color_mode = chip.app.Clusters.ColorControl.ColorMode.colorTemperature.rawValue
+      lightConfig.color_control.color_mode =
+        chip.app.Clusters.ColorControl.ColorMode.colorTemperature.rawValue
+      lightConfig.color_control.enhanced_color_mode =
+        chip.app.Clusters.ColorControl.ColorMode.colorTemperature.rawValue
 
-      let light = MatterExtendedColorLight(node.innerNode, configuration: lightConfig)
+      let light = MatterExtendedColorLight(
+        node.innerNode, configuration: lightConfig)
       self.id = Int(light.id)
 
-      var hsv = esp_matter.cluster.color_control.feature.hue_saturation.config_t()
+      var hsv = esp_matter.cluster.color_control.feature.hue_saturation
+        .config_t()
       hsv.current_hue = 255
       hsv.current_saturation = 255
       light.colorControl.add(hsv)
@@ -138,14 +162,20 @@ extension Matter {
     var rootNode: Node? = nil
 
     init() {
-      // For now, leak the object, to be able to use local variables to declare it. We don't expect this object to be created and destroyed repeatedly.
+      // For now, leak the object, to be able to use local variables to declare
+      // it. We don't expect this object to be created and destroyed repeatedly.
       _ = Unmanaged.passRetained(self)
     }
 
     func start() {
-      func callback(event: UnsafePointer<chip.DeviceLayer.ChipDeviceEvent>?, context: Int) {
-        switch Int(event!.pointee.Type) {
-        case chip.DeviceLayer.DeviceEventType.kFabricRemoved: recomissionFabric()
+      func callback(
+        event: UnsafePointer<chip.DeviceLayer.ChipDeviceEvent>?, context: Int
+      ) {
+        // Ignore callback if event not set.
+        guard let event else { return }
+        switch Int(event.pointee.Type) {
+        case chip.DeviceLayer.DeviceEventType.kFabricRemoved:
+          recomissionFabric()
         default: break
         }
       }
@@ -165,7 +195,8 @@ func print(_ a: Matter.Endpoint.Attribute) {
     case .currentSaturation: print("currentSaturation", terminator: "")
     case .currentX: print("currentX", terminator: "")
     case .currentY: print("currentY", terminator: "")
-    case .colorTemperatureMireds: print("colorTemperatureMireds", terminator: "")
+    case .colorTemperatureMireds:
+      print("colorTemperatureMireds", terminator: "")
     case .colorMode: print("colorMode", terminator: "")
     }
     print(")")
