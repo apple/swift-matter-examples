@@ -17,7 +17,8 @@ protocol MatterCluster {
 
 extension MatterCluster {
   init?(endpoint: some MatterEndpoint, id: UInt32) {
-    guard let cluster = esp_matter.cluster.get_shim(endpoint.endpoint, id) else {
+    guard let cluster = esp_matter.cluster.get_shim(endpoint.endpoint, id)
+    else {
       return nil
     }
     self.init(cluster)
@@ -35,8 +36,12 @@ struct ClusterID<Cluster: MatterCluster>: RawRepresentable {
 
   static var identify: ClusterID<Identify> { .init(rawValue: 0x0000_0003) }
   static var onOff: ClusterID<OnOff> { .init(rawValue: 0x0000_0006) }
-  static var levelControl: ClusterID<LevelControl> { .init(rawValue: 0x0000_0008) }
-  static var colorControl: ClusterID<ColorControl> { .init(rawValue: 0x0000_0300) }
+  static var levelControl: ClusterID<LevelControl> {
+    .init(rawValue: 0x0000_0008)
+  }
+  static var colorControl: ClusterID<ColorControl> {
+    .init(rawValue: 0x0000_0300)
+  }
 }
 
 struct Cluster: MatterCluster {
@@ -70,7 +75,9 @@ struct Identify: MatterConcreteCluster {
     self.cluster = cluster
   }
 
-  func attribute<Attribute: MatterAttribute>(_ id: AttributeID<Attribute>) -> Attribute {
+  func attribute<Attribute: MatterAttribute>(_ id: AttributeID<Attribute>)
+    -> Attribute
+  {
     Attribute(attribute: esp_matter.attribute.get_shim(cluster, id.rawValue))
   }
 }
@@ -91,7 +98,9 @@ struct OnOff: MatterConcreteCluster {
     self.cluster = cluster
   }
 
-  func attribute<Attribute: MatterAttribute>(_ id: AttributeID<Attribute>) -> Attribute {
+  func attribute<Attribute: MatterAttribute>(_ id: AttributeID<Attribute>)
+    -> Attribute
+  {
     Attribute(attribute: esp_matter.attribute.get_shim(cluster, id.rawValue))
   }
 
@@ -105,7 +114,9 @@ struct LevelControl: MatterConcreteCluster {
 
     init(rawValue: UInt32) { self.rawValue = rawValue }
 
-    static var currentLevel: AttributeID<CurrentLevel> { .init(rawValue: 0x0000_0000) }
+    static var currentLevel: AttributeID<CurrentLevel> {
+      .init(rawValue: 0x0000_0000)
+    }
   }
 
   var cluster: UnsafeMutablePointer<esp_matter.cluster_t>
@@ -114,7 +125,9 @@ struct LevelControl: MatterConcreteCluster {
     self.cluster = cluster
   }
 
-  func attribute<Attribute: MatterAttribute>(_ id: AttributeID<Attribute>) -> Attribute {
+  func attribute<Attribute: MatterAttribute>(_ id: AttributeID<Attribute>)
+    -> Attribute
+  {
     Attribute(attribute: esp_matter.attribute.get_shim(cluster, id.rawValue))
   }
 
@@ -128,12 +141,20 @@ struct ColorControl: MatterConcreteCluster {
 
     init(rawValue: UInt32) { self.rawValue = rawValue }
 
-    static var currentHue: AttributeID<CurrentHue> { .init(rawValue: 0x0000_0000) }
-    static var currentSaturation: AttributeID<CurrentSaturation> { .init(rawValue: 0x0000_0001) }
+    static var currentHue: AttributeID<CurrentHue> {
+      .init(rawValue: 0x0000_0000)
+    }
+    static var currentSaturation: AttributeID<CurrentSaturation> {
+      .init(rawValue: 0x0000_0001)
+    }
     static var currentX: AttributeID<CurrentX> { .init(rawValue: 0x0000_0003) }
     static var currentY: AttributeID<CurrentY> { .init(rawValue: 0x0000_0004) }
-    static var colorTemperatureMireds: AttributeID<ColorTemperatureMireds> { .init(rawValue: 0x0000_0007) }
-    static var colorMode: AttributeID<ColorMode> { .init(rawValue: 0x0000_0008) }
+    static var colorTemperatureMireds: AttributeID<ColorTemperatureMireds> {
+      .init(rawValue: 0x0000_0007)
+    }
+    static var colorMode: AttributeID<ColorMode> {
+      .init(rawValue: 0x0000_0008)
+    }
   }
 
   var cluster: UnsafeMutablePointer<esp_matter.cluster_t>
@@ -142,7 +163,9 @@ struct ColorControl: MatterConcreteCluster {
     self.cluster = cluster
   }
 
-  func attribute<Attribute: MatterAttribute>(_ id: AttributeID<Attribute>) -> Attribute {
+  func attribute<Attribute: MatterAttribute>(_ id: AttributeID<Attribute>)
+    -> Attribute
+  {
     Attribute(attribute: esp_matter.attribute.get_shim(cluster, id.rawValue))
   }
 
@@ -150,10 +173,14 @@ struct ColorControl: MatterConcreteCluster {
   var currentSaturation: CurrentSaturation { attribute(.currentSaturation) }
   var currentX: CurrentX { attribute(.currentX) }
   var currentY: CurrentY { attribute(.currentY) }
-  var colorTemperatureMireds: ColorTemperatureMireds { attribute(.colorTemperatureMireds) }
+  var colorTemperatureMireds: ColorTemperatureMireds {
+    attribute(.colorTemperatureMireds)
+  }
   var colorMode: ColorMode { attribute(.colorMode) }
 
-  func add(_ config: esp_matter.cluster.color_control.feature.hue_saturation.config_t) {
+  func add(
+    _ config: esp_matter.cluster.color_control.feature.hue_saturation.config_t
+  ) {
     var cfg = config
     esp_matter.cluster.color_control.feature.hue_saturation.add(cluster, &cfg)
   }

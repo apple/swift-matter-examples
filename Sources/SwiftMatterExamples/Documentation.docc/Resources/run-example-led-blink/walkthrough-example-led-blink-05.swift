@@ -21,7 +21,7 @@ func app_main() {
     sleep(1)
     led.enabled.toggle()
     if led.enabled {
-      led.color = .hueSaturation(Int.random(in: 0 ..< 360), 100)
+      led.color = .hueSaturation(Int.random(in: 0..<360), 100)
     }
   }
 }

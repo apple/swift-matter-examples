@@ -32,14 +32,22 @@ extension MatterEndpoint {
 }
 
 struct RootNode: MatterNode {
-  typealias AttributeCallback = (MatterAttributeEvent, Endpoint, Cluster, UInt32, UnsafeMutablePointer<esp_matter_attr_val_t>?) -> Void
-  typealias identifyCallback = (esp_matter.identification.callback_type_t, UInt16, UInt8, UInt8) -> Void
+  typealias AttributeCallback = (
+    MatterAttributeEvent, Endpoint, Cluster, UInt32,
+    UnsafeMutablePointer<esp_matter_attr_val_t>?
+  ) -> Void
+  typealias identifyCallback = (
+    esp_matter.identification.callback_type_t, UInt16, UInt8, UInt8
+  ) -> Void
 
   final class Context {
     var attribute: AttributeCallback
     var identify: identifyCallback
 
-    init(attribute: @escaping AttributeCallback, identify: @escaping identifyCallback) {
+    init(
+      attribute: @escaping AttributeCallback,
+      identify: @escaping identifyCallback
+    ) {
       self.attribute = attribute
       self.identify = identify
     }
@@ -48,20 +56,26 @@ struct RootNode: MatterNode {
   var node: UnsafeMutablePointer<esp_matter.node_t>
   let context: Context
 
-  init?(attribute: @escaping AttributeCallback, identify: @escaping identifyCallback) {
+  init?(
+    attribute: @escaping AttributeCallback, identify: @escaping identifyCallback
+  ) {
     var nodeConfig = esp_matter.node.config_t()
-    esp_matter.attribute.set_callback_shim { type, endpoint, cluster, attribute, value, context in
+    esp_matter.attribute.set_callback_shim {
+      type, endpoint, cluster, attribute, value, context in
       guard let context else {
         return ESP_OK
       }
       guard let e = Endpoint(id: endpoint) else { return ESP_OK }
       guard let c = Cluster(endpoint: e, id: cluster) else { return ESP_OK }
       let ctx = Unmanaged<Context>.fromOpaque(context).takeUnretainedValue()
-      ctx.attribute(MatterAttributeEvent(rawValue: type.rawValue)!, e, c, attribute, value)
+      ctx.attribute(
+        MatterAttributeEvent(rawValue: type.rawValue)!, e, c, attribute, value)
       return ESP_OK
     }
-    esp_matter.identification.set_callback { type, endpoint, effect, variant, context in
-      Unmanaged<Context>.fromOpaque(context!).takeUnretainedValue().identify(type, endpoint, effect, variant)
+    esp_matter.identification.set_callback {
+      type, endpoint, effect, variant, context in
+      Unmanaged<Context>.fromOpaque(context!).takeUnretainedValue().identify(
+        type, endpoint, effect, variant)
       return ESP_OK
     }
     guard let node = esp_matter.node.create_raw() else {
@@ -71,7 +85,8 @@ struct RootNode: MatterNode {
     let context = Context(attribute: attribute, identify: identify)
     withUnsafeMutablePointer(to: &nodeConfig.root_node) {
       // Transfer ownership to the node. This is a leak for now, but we don't expect nodes to be created and destroyed repeatedly.
-      _ = esp_matter.endpoint.root_node.create(node, $0, 0x00, Unmanaged.passRetained(context).toOpaque())
+      _ = esp_matter.endpoint.root_node.create(
+        node, $0, 0x00, Unmanaged.passRetained(context).toOpaque())
     }
     self.node = node
     self.context = context
@@ -109,13 +124,19 @@ struct Endpoint: MatterEndpoint {
 }
 
 struct MatterExtendedColorLight: MatterConreteEndpoint {
-  static var deviceTypeId: UInt32 { esp_matter.endpoint.extended_color_light.get_device_type_id() }
+  static var deviceTypeId: UInt32 {
+    esp_matter.endpoint.extended_color_light.get_device_type_id()
+  }
 
   var endpoint: UnsafeMutablePointer<esp_matter.endpoint_t>
 
-  init(_ node: RootNode, configuration: esp_matter.endpoint.extended_color_light.config_t) {
+  init(
+    _ node: RootNode,
+    configuration: esp_matter.endpoint.extended_color_light.config_t
+  ) {
     var config = configuration
-    endpoint = esp_matter.endpoint.extended_color_light.create(node.node, &config, 0x00, Unmanaged.passRetained(node.context).toOpaque())
+    endpoint = esp_matter.endpoint.extended_color_light.create(
+      node.node, &config, 0x00, Unmanaged.passRetained(node.context).toOpaque())
   }
 
   init(_ endpoint: UnsafeMutablePointer<esp_matter.endpoint_t>) {
