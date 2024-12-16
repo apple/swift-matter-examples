@@ -21,7 +21,9 @@ extension Matter {
       endpoints.append(endpoint)
     }
 
-    var innerNode: RootNode
+    // swift-format-ignore: NeverUseImplicitlyUnwrappedOptionals
+    // This is never actually nil after init(), and inside init we want to form a callback closure that references self.
+    var innerNode: RootNode!
 
     init() {
       // Initialize persistent storage.
