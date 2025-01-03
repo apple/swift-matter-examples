@@ -1,6 +1,9 @@
 # Start from the latest Swift nightly main toolchain
 FROM swiftlang/swift:nightly-main-jammy
 
+# The number of submodules fetched at the same time
+ARG GIT_CLONE_JOBS=24
+
 # Install ESP-IDF dependencies
 RUN apt-get update \
   && apt-get install --yes --no-install-recommends \
@@ -19,7 +22,7 @@ RUN mkdir -p ~/esp \
     --depth 1 \
     --shallow-submodules \
     --recursive https://github.com/espressif/esp-idf.git \
-    --jobs 24
+    --jobs $GIT_CLONE_JOBS
 
 # Install ESP-IDF
 RUN cd ~/esp/esp-idf \
@@ -41,7 +44,7 @@ RUN mkdir -p ~/esp \
     --depth 1 \
     --shallow-submodules \
     --recursive https://github.com/espressif/esp-matter.git \
-    --jobs 24
+    --jobs $GIT_CLONE_JOBS
 
 # Download ESP-Matter
 RUN mkdir -p ~/esp \
