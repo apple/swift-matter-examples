@@ -2,6 +2,7 @@
 idf_component_register(
     SRCS "../Matter/MatterInterface.cpp"
     PRIV_INCLUDE_DIRS "."
+    LDFRAGMENTS "linker.lf"
 )
 
 # Clear the default COMPILE_OPTIONS which include a lot of C/C++ specific compiler flags that the Swift compiler will not accept
