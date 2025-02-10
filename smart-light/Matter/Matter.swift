@@ -86,19 +86,19 @@ extension Matter {
       case unknown(UInt32)
 
       init?(cluster: Cluster, attribute: UInt32) {
-        if let _ = cluster.as(OnOff.self) {
+        if cluster.as(OnOff.self) != nil {
           switch attribute {
           case OnOff.AttributeID<OnOff.OnOffState>.state.rawValue: self = .onOff
           default: return nil
           }
-        } else if let _ = cluster.as(LevelControl.self) {
+        } else if cluster.as(LevelControl.self) != nil {
           switch attribute {
           case LevelControl.AttributeID<LevelControl.CurrentLevel>.currentLevel
             .rawValue:
             self = .levelControl
           default: return nil
           }
-        } else if let _ = cluster.as(ColorControl.self) {
+        } else if cluster.as(ColorControl.self) != nil {
           switch attribute {
           case ColorControl.AttributeID<ColorControl.CurrentHue>.currentHue
             .rawValue:
