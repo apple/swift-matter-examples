@@ -60,7 +60,9 @@
       }
 
       @Step {
-        In a new shell, launch the docker container from the previously built image. 
+        In a new shell, launch the docker container from the previously built image.
+
+        If you are running Docker on Linux you also need to add `--add-host=host.docker.internal:host-gateway` to the flags. 
         
         > Important: Be sure to run the container from the root directory of swift-matter-examples.  
 
