@@ -18,7 +18,7 @@ RUN pip install --upgrade cmake
 RUN mkdir -p ~/esp \
   && cd ~/esp \
   && git clone \
-    --branch master \
+    --branch v5.2.3 \
     --depth 1 \
     --shallow-submodules \
     --recursive https://github.com/espressif/esp-idf.git \
@@ -40,7 +40,7 @@ RUN apt-get update \
 RUN mkdir -p ~/esp \
   && cd ~/esp \
   && git clone \
-    --branch release/v1.2 \
+    --branch release/v1.4 \
     --depth 1 \
     --shallow-submodules \
     --recursive https://github.com/espressif/esp-matter.git \
