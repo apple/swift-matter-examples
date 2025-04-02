@@ -9,10 +9,10 @@ $ brew install cmake ninja dfu-util
 # Create an ESP SDK directory
 $ mkdir -p ~/esp
 
-# Download the ESP-IDF SDK (`master` or `v5.4` when released)
+# Download the ESP-IDF SDK
 $ cd ~/esp
 $ git clone \
-  --branch master \
+  --branch v5.4.1 \
   --depth 1 \
   --shallow-submodules \
   --recursive https://github.com/espressif/esp-idf.git \
