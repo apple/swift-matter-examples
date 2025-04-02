@@ -14,11 +14,11 @@ RUN apt-get update \
 # Install CMake >= 3.29
 RUN pip install --upgrade cmake
 
-# Download the ESP-IDF SDK (`master` or `v5.4` when released)
+# Download ESP-IDF
 RUN mkdir -p ~/esp \
   && cd ~/esp \
   && git clone \
-    --branch master \
+    --branch v5.4.1 \
     --depth 1 \
     --shallow-submodules \
     --recursive https://github.com/espressif/esp-idf.git \

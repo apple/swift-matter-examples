@@ -40,7 +40,7 @@ Before running the examples, ensure you have the following tools available:
 - Software
   - [Swift Nightly Toolchain](https://www.swift.org/download)
   - [CMake 3.29+](https://cmake.org/download)
-  - [ESP-IDF 5.2.1](https://docs.espressif.com/projects/esp-idf/en/v5.2.1/esp32c6/get-started/index.html)
+  - [ESP-IDF v5.4.1](https://docs.espressif.com/projects/esp-idf/en/v5.4.1/esp32c6/get-started/index.html)
   - [ESP-Matter SDK 1.2](https://docs.espressif.com/projects/esp-matter/en/latest/esp32c6/introduction.html)
 
 > [!IMPORTANT]
