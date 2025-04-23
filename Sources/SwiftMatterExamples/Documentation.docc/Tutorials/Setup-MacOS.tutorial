@@ -83,7 +83,7 @@
     @ContentAndMedia {
       Install the tools and SDKs needed to build an ESP32-C6 Matter accessory.
       
-      The steps here should be enough to get started quickly, but for additional detailed instructions see the official [ESP-IDF Setup](https://docs.espressif.com/projects/esp-idf/en/v5.3.1/esp32/get-started/linux-macos-setup.html) and [ESP-Matter Setup](https://docs.espressif.com/projects/esp-matter/en/latest/esp32/developing.html#esp-matter-setup) documentation.
+      The steps here should be enough to get started quickly, but for additional detailed instructions see the official [ESP-IDF Setup](https://docs.espressif.com/projects/esp-idf/en/v5.4.1/esp32/get-started/linux-macos-setup.html) and [ESP-Matter Setup](https://docs.espressif.com/projects/esp-matter/en/latest/esp32/developing.html#esp-matter-setup) documentation.
     }
 
     @Steps {
@@ -108,7 +108,7 @@
       }
       
       @Step {
-        Clone the ESP-IDF `master` branch (5.4 when released) from GitHub.
+        Clone the ESP-IDF repository version v5.4.1 from GitHub.
         
         Note this SDK is quite large (~500 MB for a shallow clone) and may take significant time to download depending on your internet connection.
         
