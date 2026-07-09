@@ -140,7 +140,7 @@ extension Matter {
       var lightConfig = esp_matter.endpoint.extended_color_light.config_t()
       lightConfig.on_off.on_off = true
       lightConfig.level_control.current_level = .init(64)
-      lightConfig.level_control.lighting.start_up_current_level = .init(64)
+      lightConfig.level_control_lighting.start_up_current_level = .init(64)
       lightConfig.color_control.color_mode =
         chip.app.Clusters.ColorControl.ColorMode.colorTemperature.rawValue
       lightConfig.color_control.enhanced_color_mode =

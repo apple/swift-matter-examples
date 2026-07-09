@@ -114,11 +114,14 @@ struct Endpoint: MatterEndpoint {
   }
 
   func `as`<T: MatterConreteEndpoint>(_ type: T.Type) -> T? {
-    var count = UInt8(0)
     let expected = T.deviceTypeId
-    let ids = esp_matter.endpoint.get_device_type_ids(endpoint, &count)
-    for id in UnsafeMutableBufferPointer(start: ids, count: Int(count)) {
-      if id == expected {
+    let count = esp_matter.endpoint.get_device_type_count(endpoint)
+    for i in 0..<count {
+      var deviceTypeId: UInt32 = 0
+      var deviceTypeVersion: UInt8 = 0
+      let err = esp_matter.endpoint.get_device_type_at_index(
+        endpoint, i, &deviceTypeId, &deviceTypeVersion)
+      if err == ESP_OK && deviceTypeId == expected {
         return T(endpoint)
       }
     }
